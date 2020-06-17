@@ -21,14 +21,16 @@ namespace API
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                var logger = services.GetRequiredService<ILogger<Program>>();
                 try
                 {
                     var context = services.GetRequiredService<DataContext>();
                     context.Database.Migrate();
+                    logger.LogInformation("Seeing data if not already seeded...");
+                    Seed.SeedData(context);
                 }
                 catch (Exception ex)
                 {
-                    var logger = services.GetRequiredService<ILogger>();
                     logger.LogError(ex, "An error occurred during migration");
                     throw;
                 }
