@@ -11,7 +11,6 @@ namespace Application.Errors
         {
             this.Errors = errors;
             this.Code = code;
-
         }
     }
 }
