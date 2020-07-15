@@ -27,7 +27,6 @@ namespace API.MIddleware
             catch (Exception ex)
             {
                 await HandleExceptionAsync(context, ex, _logger);
-                throw;
             }
         }
 
@@ -60,6 +59,5 @@ namespace API.MIddleware
                 await context.Response.WriteAsync(result);
             }
         }
-
     }
 }
