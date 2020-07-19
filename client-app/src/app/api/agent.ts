@@ -15,6 +15,7 @@ axios.interceptors.response.use(undefined, (error) => {
   }
   if (
     status === 400 &&
+
     config.method === 'get' &&
     data.errors.hasOwnProperty('id')
   ) {
@@ -23,6 +24,7 @@ axios.interceptors.response.use(undefined, (error) => {
   if (status === 500) {
     toast.error('Server error - check terminal for more info!');
   }
+  throw error;
 });
 
 const responseBody = (response: AxiosResponse) => response.data;
