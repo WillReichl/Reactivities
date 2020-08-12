@@ -15,6 +15,7 @@ export default class ProfileStore {
   @observable loadingProfile = true;
   @observable uploadingPhoto = false;
   @observable loading = false;
+  @observable editingProfile = false;
 
   @computed get isCurrentUser() {
     if (this.rootStore.userStore.user && this.profile) {
@@ -96,6 +97,28 @@ export default class ProfileStore {
       toast.error('Problem deleting the photo');
       runInAction(() => {
         this.loading = false;
+      });
+    }
+  };
+
+  @action editProfile = async (profile: IProfile) => {
+    this.editingProfile = true;
+    try {
+      await agent.Profiles.editProfile(profile);
+      runInAction(() => {
+        if (this.profile) {
+          this.profile = { ...this.profile, ...profile};
+          if (this.rootStore.userStore.user?.displayName !== profile.displayName) {
+            this.rootStore.userStore.user!.displayName = profile.displayName;
+          }
+        }
+        this.editingProfile = false;
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error('Problem editing bio');
+      runInAction(() => {
+        this.editingProfile = false;
       });
     }
   };
